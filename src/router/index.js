@@ -1,9 +1,16 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Contacts from '@/pages/Contacts';
 
 Vue.use(VueRouter);
 
-const routes = [];
+const routes = [
+  {
+    path: '/contacts',
+    name: 'Contacts',
+    component: Contacts,
+  },
+];
 
 const router = new VueRouter({
   mode: 'history',
