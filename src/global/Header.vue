@@ -4,7 +4,7 @@
       dark
       src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
     >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="openSideMenu"></v-app-bar-nav-icon>
 
       <v-toolbar-title>マイアドレス帳</v-toolbar-title>
 
@@ -21,7 +21,13 @@
 <script>
 export default {
   name: 'Header',
-  methods: {},
+  methods: {
+    openSideMenu() {
+      // コンポーネントのインスタンス上では、this.$storeでstoreにアクセスできる
+      // dispatchメソッドで、storeのtoggleSideMenuアクションを呼び出している
+      this.$store.dispatch('toggleSideMenu');
+    },
+  },
 };
 </script>
 

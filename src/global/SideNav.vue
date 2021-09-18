@@ -1,9 +1,12 @@
 <template>
   <v-container fluid fill-height>
-    <v-btn color="blue" dark @click.stop="drawer = !drawer">Toggle</v-btn>
+    <!-- <v-btn color="blue" dark @click.stop="drawer = !drawer">Toggle</v-btn> -->
 
+    <!-- <v-navigation-drawer v-model="drawer" absolute temporary> 元々の記述 -->
+
+    <!-- Vuexの場合の記述 -->
     <!-- v-nav-drawerの値がtrueならmenuが開くという機能が備わっている -->
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="$store.state.drawer" absolute temporary>
       <v-list>
         <v-list-item>
           <v-list-item-avatar>
@@ -35,7 +38,7 @@
 export default {
   data() {
     return {
-      drawer: false,
+      // drawer: false, // ストアに移行するため削除（便宜上コメントアウト）
       // https://materialdesignicons.com/ でicon名を確認
       items: [{ title: '連絡先一覧', icon: 'mdi-account' }],
     };
