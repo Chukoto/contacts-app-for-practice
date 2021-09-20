@@ -20,11 +20,21 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 // コンポーネントのメソッドに、storeのactionsメソッドを組み込む役割がある
 import { mapActions } from 'vuex';
 
 export default {
   name: 'Header',
+  created() {
+    // onAuthStateChangedの引数に、認証の状態が変わった際に呼び出されるコールバック関数を受け取る
+    // ここでは、userオブジェクトが格納されていることをチェックして、setLoginUserでユーザーをstoreに格納している。
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setLoginUser(user);
+      }
+    });
+  },
   methods: {
     // ①...mapActionsなし
     openSideMenu() {
@@ -35,7 +45,7 @@ export default {
 
     // ②...mapActionsあり
     // 分割代入でactionsをメソッドに組み込める
-    ...mapActions(['toggleSideMenu']),
+    ...mapActions(['toggleSideMenu', 'setLoginUser']),
   },
 };
 </script>
