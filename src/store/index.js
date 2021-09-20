@@ -6,10 +6,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    login_user: null,
     drawer: false,
     contacts: [],
   },
   mutations: {
+    setLoginUser(state, user) {
+      state.login_user = user;
+    },
     toggleSideMenu(state) {
       state.drawer = !state.drawer;
     },
@@ -18,6 +22,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    setLoginUser({ commit }, user) {
+      commit('setLoginUser', user);
+    },
     login() {
       // Google認証のプロバイダを利用する際に必要
       const google_auth_provider = new firebase.auth.GoogleAuthProvider();
