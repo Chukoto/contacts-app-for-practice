@@ -14,6 +14,9 @@ export default new Vuex.Store({
     setLoginUser(state, user) {
       state.login_user = user;
     },
+    deleteLoginUser(state) {
+      state.login_user = null;
+    },
     toggleSideMenu(state) {
       state.drawer = !state.drawer;
     },
@@ -25,6 +28,9 @@ export default new Vuex.Store({
     setLoginUser({ commit }, user) {
       commit('setLoginUser', user);
     },
+    deleteLoginUser({ commit }) {
+      commit('deleteLoginUser');
+    },
     login() {
       // Google認証のプロバイダを利用する際に必要
       const google_auth_provider = new firebase.auth.GoogleAuthProvider();
@@ -35,6 +41,9 @@ export default new Vuex.Store({
     // ここではcontext.commitメソッドだけを受け取る
     toggleSideMenu({ commit }) {
       commit('toggleSideMenu'); // commitメソッドは、mutationのメソッドを呼び出すために使う
+    },
+    logout() {
+      firebase.auth().signOut();
     },
 
     // actionの第二引数で、コンポーネントの値を受け取ることができる
