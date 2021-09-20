@@ -5,11 +5,19 @@
         <h1>連絡先一覧</h1>
       </v-flex>
 
+      <v-flex xs12 mt-5 text-right>
+        <router-link :to="{ name: 'Contact_edit' }">
+          <v-btn color="info">
+            連絡先追加
+          </v-btn>
+        </router-link>
+      </v-flex>
+
       <v-flex xs12 mt-5 justify-center>
         <!-- v-data-tableについて -->
         <!-- ①v-bind:headersに、thタグの役割。scriptの配列'header'の指定が必須-->
-        <!-- ②v-bind:itemsに、scriptの配列'addresses'の指定が必須 -->
-        <v-data-table :headers="headers" :items="addresses">
+        <!-- ②v-bind:itemsに、scriptの配列'contacts'の指定が必須 -->
+        <v-data-table :headers="headers" :items="contacts">
           <template v-slot:items="props">
             <td class="text-xs-left">{{ props.item.name }}</td>
             <td class="text-xs-left">{{ props.item.tel }}</td>
@@ -24,6 +32,9 @@
 
 <script>
 export default {
+  created() {
+    this.contacts = this.$store.state.contacts;
+  },
   data() {
     return {
       headers: [
@@ -32,20 +43,7 @@ export default {
         { text: 'メールアドレス', value: 'email' },
         { text: '住所', value: 'address' },
       ],
-      addresses: [
-        {
-          name: '友人１',
-          tel: '090-0000-1111',
-          email: 'sample1@mail.com',
-          address: '東京都渋谷区',
-        },
-        {
-          name: '友人２',
-          tel: '090-2222-3333',
-          email: 'sample2@mail.com',
-          address: '東京都品川区',
-        },
-      ],
+      contacts: [],
     };
   },
 };
