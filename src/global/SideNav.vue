@@ -21,7 +21,11 @@
 
         <v-divider></v-divider>
 
-        <v-list-item v-for="(item, index) in items" :key="index">
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          :to="item.link"
+        >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -40,7 +44,14 @@ export default {
     return {
       // drawer: false, // ストアに移行するため削除（便宜上コメントアウト）
       // https://materialdesignicons.com/ でicon名を確認
-      items: [{ title: '連絡先一覧', icon: 'mdi-account' }],
+      items: [
+        { title: 'ホーム', icon: 'mdi-home', link: { name: 'Home' } },
+        {
+          title: '連絡先一覧',
+          icon: 'mdi-account',
+          link: { name: 'Contacts' },
+        },
+      ],
     };
   },
 };
