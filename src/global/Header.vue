@@ -11,9 +11,11 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon @click="logout">
-        <v-icon>mdi-export</v-icon>
-      </v-btn>
+      <v-toolbar-items v-if="$store.state.login_user">
+        <v-btn icon @click="logout">
+          <v-icon>mdi-export</v-icon>
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <v-spacer></v-spacer>
   </div>
