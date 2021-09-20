@@ -10,12 +10,10 @@
       <v-list>
         <v-list-item>
           <v-list-item-avatar>
-            <img
-              src="https://avatars.githubusercontent.com/u/70996691?s=400&v=4"
-            />
+            <img v-if="photoURL" :src="photoURL" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>Haruki Kiruha</v-list-item-title>
+            <v-list-item-title>{{ userName }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -39,13 +37,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
       // drawer: false, // ストアに移行するため削除（便宜上コメントアウト）
       // https://materialdesignicons.com/ でicon名を確認
       items: [
-        { title: 'ホーム', icon: 'mdi-home', link: { name: 'Home' } },
         {
           title: '連絡先一覧',
           icon: 'mdi-account',
@@ -53,6 +51,10 @@ export default {
         },
       ],
     };
+  },
+  // computedに組み込むことで、そのコンポーネントの一つのプロパティとして、getterの戻り値を参照できる。
+  computed: {
+    ...mapGetters(['userName', 'photoURL']),
   },
 };
 </script>
