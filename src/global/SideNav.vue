@@ -44,7 +44,6 @@ export default {
       // drawer: false, // ストアに移行するため削除（便宜上コメントアウト）
       // https://materialdesignicons.com/ でicon名を確認
       items: [
-        { title: 'ホーム', icon: 'mdi-home', link: { name: 'Home' } },
         {
           title: '連絡先一覧',
           icon: 'mdi-account',
