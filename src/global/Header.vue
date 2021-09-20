@@ -11,7 +11,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <v-btn icon @click="logout">
         <v-icon>mdi-export</v-icon>
       </v-btn>
     </v-toolbar>
@@ -32,6 +32,8 @@ export default {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setLoginUser(user);
+      } else {
+        this.deleteLoginUser();
       }
     });
   },
@@ -45,7 +47,12 @@ export default {
 
     // ②...mapActionsあり
     // 分割代入でactionsをメソッドに組み込める
-    ...mapActions(['toggleSideMenu', 'setLoginUser']),
+    ...mapActions([
+      'toggleSideMenu',
+      'setLoginUser',
+      'logout',
+      'deleteLoginUser',
+    ]),
   },
 };
 </script>
