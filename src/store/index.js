@@ -47,13 +47,21 @@ export default new Vuex.Store({
     },
 
     // actionの第二引数で、コンポーネントの値を受け取ることができる
-    addContact({ commit }, contact) {
+    // actionの引数に渡ってくるcontextオブジェクトには、gettersも含まれている
+    addContact({ getters, commit }, contact) {
+      if (getters.uid) {
+        firebase
+          .firestore()
+          .collection(`users/${getters.uid}/contacts`)
+          .add(contact);
+      }
       commit('addContact', contact);
     },
   },
   getters: {
     userName: (state) => (state.login_user ? state.login_user.displayName : ''),
     photoURL: (state) => (state.login_user ? state.login_user.photoURL : ''),
+    uid: (state) => (state.login_user ? state.login_user.uid : null),
   },
   modules: {},
 });
