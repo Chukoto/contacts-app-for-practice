@@ -20,7 +20,8 @@ export default new Vuex.Store({
     toggleSideMenu(state) {
       state.drawer = !state.drawer;
     },
-    addContact(state, contact) {
+    addContact(state, { id, contact }) {
+      contact.id = id;
       state.contacts.push(contact);
     },
   },
@@ -53,7 +54,9 @@ export default new Vuex.Store({
         .get()
         .then((snapshot) => {
           // firebase snapshotにデータが格納されている
-          snapshot.forEach((doc) => commit('addContact', doc.data()));
+          snapshot.forEach((doc) =>
+            commit('addContact', { id: doc.id, contact: doc.data() })
+          );
         });
     },
 
@@ -64,9 +67,13 @@ export default new Vuex.Store({
         firebase
           .firestore()
           .collection(`users/${getters.uid}/contacts`)
-          .add(contact);
+          .add(contact)
+          // addメソッドのコールバック関数には、document referencesのオブジェクトが渡ってくる
+          // それをdoc変数で受け取っている
+          .then((doc) => {
+            commit('addContact', { id: doc.id, contact });
+          });
       }
-      commit('addContact', contact);
     },
   },
   getters: {
