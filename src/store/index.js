@@ -80,6 +80,9 @@ export default new Vuex.Store({
     userName: (state) => (state.login_user ? state.login_user.displayName : ''),
     photoURL: (state) => (state.login_user ? state.login_user.photoURL : ''),
     uid: (state) => (state.login_user ? state.login_user.uid : null),
+    getContactById: (state) =>
+      // 内側の関数 ＝ getterを呼び出す時点でidを指定して、IDとマッチしたものを使用するということになる
+      (id) => state.contacts.find((contact) => contact.id === id),
   },
   modules: {},
 });

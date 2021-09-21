@@ -39,6 +39,18 @@
 <script>
 import { mapActions } from 'vuex';
 export default {
+  created() {
+    if (!this.$route.params.contact_id) return;
+
+    const contact = this.$store.getters.getContactById(
+      this.$route.params.contact_id
+    );
+    if (contact) {
+      this.contact = contact;
+    } else {
+      this.$router.push({ name: 'Contacts' });
+    }
+  },
   data() {
     return {
       contact: {},
