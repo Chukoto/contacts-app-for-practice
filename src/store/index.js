@@ -28,6 +28,10 @@ export default new Vuex.Store({
       const index = state.contacts.findIndex((contact) => contact.id === id);
       state.contacts[index] = contact;
     },
+    deleteContact(state, { id }) {
+      const index = state.contacts.findIndex((contact) => contact.id === id);
+      state.contacts.splice(index, 1);
+    },
   },
   actions: {
     setLoginUser({ commit }, user) {
@@ -88,6 +92,18 @@ export default new Vuex.Store({
           .update(contact)
           .then(() => {
             commit('updateContact', { id, contact });
+          });
+      }
+    },
+    deleteContact({ getters, commit }, { id }) {
+      if (getters.uid) {
+        firebase
+          .firestore()
+          .collection(`users/${getters.uid}/contacts`)
+          .doc(id)
+          .delete()
+          .then(() => {
+            commit('deleteContact', { id });
           });
       }
     },
