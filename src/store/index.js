@@ -24,6 +24,10 @@ export default new Vuex.Store({
       contact.id = id;
       state.contacts.push(contact);
     },
+    updateContact(state, { id, contact }) {
+      const index = state.contacts.findIndex((contact) => contact.id === id);
+      state.contacts[index] = contact;
+    },
   },
   actions: {
     setLoginUser({ commit }, user) {
@@ -72,6 +76,18 @@ export default new Vuex.Store({
           // それをdoc変数で受け取っている
           .then((doc) => {
             commit('addContact', { id: doc.id, contact });
+          });
+      }
+    },
+    updateContact({ getters, commit }, { id, contact }) {
+      if (getters.uid) {
+        firebase
+          .firestore()
+          .collection(`users/${getters.uid}/contacts`)
+          .doc(id)
+          .update(contact)
+          .then(() => {
+            commit('updateContact', { id, contact });
           });
       }
     },

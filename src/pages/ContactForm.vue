@@ -59,12 +59,19 @@ export default {
   methods: {
     // 保存ボタン押下後に実行
     submit() {
-      //
-      this.addContact(this.contact);
+      if (this.$route.params.contact_id) {
+        this.updateContact({
+          id: this.$route.params.contact_id,
+          contact: this.contact,
+        });
+      } else {
+        this.addContact(this.contact);
+      }
+
       this.$router.push({ name: 'Contacts' });
       this.contact = {};
     },
-    ...mapActions(['addContact']),
+    ...mapActions(['addContact', 'updateContact']),
   },
 };
 </script>
