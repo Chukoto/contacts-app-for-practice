@@ -24,6 +24,22 @@
             <td class="text-xs-left">{{ props.item.email }}</td>
             <td class="text-xs-left">{{ props.item.address }}</td>
           </template>
+          <!-- <template v-slot:item.action="{ item }"> 
+            'v-slot' directive doesn't support any modifierと
+            エラーが出たときの対処 ↓ -->
+          <template v-slot:[`item.action`]="{ item }">
+            <router-link
+              :to="{
+                name: 'Contact_edit',
+                params: { contact_id: item.id },
+              }"
+            >
+              <v-icon small class="mr-2">mdi-pencil</v-icon>
+            </router-link>
+            <v-icon small class="mr-2" @click="deleteConfirm(item.id)">
+              mdi-delete
+            </v-icon>
+          </template>
         </v-data-table>
       </v-flex>
     </v-layout>
@@ -31,6 +47,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   created() {
     this.contacts = this.$store.state.contacts;
@@ -42,9 +59,24 @@ export default {
         { text: '電話番号', value: 'tel' },
         { text: 'メールアドレス', value: 'email' },
         { text: '住所', value: 'address' },
+        { text: '操作', value: 'action', sortable: false },
       ],
       contacts: [],
     };
   },
+  methods: {
+    deleteConfirm(id) {
+      if (confirm('削除してよろしいですか？')) {
+        this.deleteContact({ id });
+      }
+    },
+    ...mapActions(['deleteContact']),
+  },
 };
 </script>
+
+<style scoped lang="scss">
+a {
+  text-decoration: none;
+}
+</style>

@@ -20,8 +20,17 @@ export default new Vuex.Store({
     toggleSideMenu(state) {
       state.drawer = !state.drawer;
     },
-    addContact(state, contact) {
+    addContact(state, { id, contact }) {
+      contact.id = id;
       state.contacts.push(contact);
+    },
+    updateContact(state, { id, contact }) {
+      const index = state.contacts.findIndex((contact) => contact.id === id);
+      state.contacts[index] = contact;
+    },
+    deleteContact(state, { id }) {
+      const index = state.contacts.findIndex((contact) => contact.id === id);
+      state.contacts.splice(index, 1);
     },
   },
   actions: {
@@ -53,7 +62,9 @@ export default new Vuex.Store({
         .get()
         .then((snapshot) => {
           // firebase snapshotにデータが格納されている
-          snapshot.forEach((doc) => commit('addContact', doc.data()));
+          snapshot.forEach((doc) =>
+            commit('addContact', { id: doc.id, contact: doc.data() })
+          );
         });
     },
 
@@ -64,15 +75,46 @@ export default new Vuex.Store({
         firebase
           .firestore()
           .collection(`users/${getters.uid}/contacts`)
-          .add(contact);
+          .add(contact)
+          // addメソッドのコールバック関数には、document referencesのオブジェクトが渡ってくる
+          // それをdoc変数で受け取っている
+          .then((doc) => {
+            commit('addContact', { id: doc.id, contact });
+          });
       }
-      commit('addContact', contact);
+    },
+    updateContact({ getters, commit }, { id, contact }) {
+      if (getters.uid) {
+        firebase
+          .firestore()
+          .collection(`users/${getters.uid}/contacts`)
+          .doc(id)
+          .update(contact)
+          .then(() => {
+            commit('updateContact', { id, contact });
+          });
+      }
+    },
+    deleteContact({ getters, commit }, { id }) {
+      if (getters.uid) {
+        firebase
+          .firestore()
+          .collection(`users/${getters.uid}/contacts`)
+          .doc(id)
+          .delete()
+          .then(() => {
+            commit('deleteContact', { id });
+          });
+      }
     },
   },
   getters: {
     userName: (state) => (state.login_user ? state.login_user.displayName : ''),
     photoURL: (state) => (state.login_user ? state.login_user.photoURL : ''),
     uid: (state) => (state.login_user ? state.login_user.uid : null),
+    getContactById: (state) =>
+      // 内側の関数 ＝ getterを呼び出す時点でidを指定して、IDとマッチしたものを使用するということになる
+      (id) => state.contacts.find((contact) => contact.id === id),
   },
   modules: {},
 });

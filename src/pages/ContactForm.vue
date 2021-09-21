@@ -39,6 +39,18 @@
 <script>
 import { mapActions } from 'vuex';
 export default {
+  created() {
+    if (!this.$route.params.contact_id) return;
+
+    const contact = this.$store.getters.getContactById(
+      this.$route.params.contact_id
+    );
+    if (contact) {
+      this.contact = contact;
+    } else {
+      this.$router.push({ name: 'Contacts' });
+    }
+  },
   data() {
     return {
       contact: {},
@@ -47,12 +59,19 @@ export default {
   methods: {
     // 保存ボタン押下後に実行
     submit() {
-      //
-      this.addContact(this.contact);
+      if (this.$route.params.contact_id) {
+        this.updateContact({
+          id: this.$route.params.contact_id,
+          contact: this.contact,
+        });
+      } else {
+        this.addContact(this.contact);
+      }
+
       this.$router.push({ name: 'Contacts' });
       this.contact = {};
     },
-    ...mapActions(['addContact']),
+    ...mapActions(['addContact', 'updateContact']),
   },
 };
 </script>
