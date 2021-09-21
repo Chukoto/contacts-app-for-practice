@@ -46,6 +46,17 @@ export default new Vuex.Store({
       firebase.auth().signOut();
     },
 
+    fetchContacts({ getters, commit }) {
+      firebase
+        .firestore()
+        .collection(`users/${getters.uid}/contacts`)
+        .get()
+        .then((snapshot) => {
+          // firebase snapshotにデータが格納されている
+          snapshot.forEach((doc) => commit('addContact', doc.data()));
+        });
+    },
+
     // actionの第二引数で、コンポーネントの値を受け取ることができる
     // actionの引数に渡ってくるcontextオブジェクトには、gettersも含まれている
     addContact({ getters, commit }, contact) {

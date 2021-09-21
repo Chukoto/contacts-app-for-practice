@@ -44,6 +44,7 @@ export default {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setLoginUser(user);
+        this.fetchContacts();
         if (this.$router.currentRoute.name === 'home') {
           this.$router.push({ name: 'Contacts' });
         }
@@ -68,6 +69,7 @@ export default {
       'setLoginUser',
       'logout',
       'deleteLoginUser',
+      'fetchContacts',
     ]),
   },
 };
